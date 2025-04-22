@@ -126,10 +126,10 @@ int main()
 
    // Matrix which stores cost of travelling to that city.
    // Example 
-//    0 10 15 20
-//    10 0 35 25
-//    15 35 0 30
-//    20 25 30 0
+   // 0 10 15 20
+   // 10 0 35 25
+   // 15 35 0 30
+   // 20 25 30 0
    cost = vector<vector<int>>(N, vector<int>(N));
    cout << "Enter the cost matrix:\n";
    for (int i = 0; i < N; i++)
@@ -137,7 +137,6 @@ int main()
          cin >> cost[i][j];
 
    
-   //! Initiate Algo.
    TSP();
 
    cout << "\nMinimum cost: " << final_res << endl;

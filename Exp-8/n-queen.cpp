@@ -1,5 +1,4 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
 const int MAX = 20;
@@ -11,9 +10,10 @@ bool isSafe(int row, int col)
 {
    for (int i = 0; i < row; i++)
    {
+      // Condition to check if a queen exists in one these positions.
       if (board[i] == col || board[i] - i == col - row || board[i] + i == col + row)
       {
-         return false;
+         return false; // if exists then we cant place the queen there.
       }
    }
    return true;
