@@ -30,6 +30,7 @@ int main()
       licenses[i].index = i + 1;
    }
 
+   // descending sort rates on the basis of growth rate
    sort(licenses.begin(), licenses.end(), comparator);
 
    double totalCost = 0.0;
