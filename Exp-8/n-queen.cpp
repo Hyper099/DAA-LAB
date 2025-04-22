@@ -2,109 +2,93 @@
 #include <vector>
 using namespace std;
 
-// Function to print the board and queen positions
-void printBoard(vector<vector<int>> &board, int n, vector<pair<int, int>> &positions)
+const int MAX = 20;
+int n;
+int board[MAX];
+int solutionCount = 0;
+
+bool isSafe(int row, int col)
+{
+   for (int i = 0; i < row; i++)
+   {
+      if (board[i] == col || board[i] - i == col - row || board[i] + i == col + row)
+      {
+         return false;
+      }
+   }
+   return true;
+}
+
+void printSolution()
 {
    cout << "Board Configuration:\n";
    for (int i = 0; i < n; i++)
    {
       for (int j = 0; j < n; j++)
       {
-         cout << (board[i][j] == 1 ? "Q " : ". ");
+         if (board[i] == j)
+         {
+            cout << " Q ";
+         }
+         else
+         {
+            cout << " * ";
+         }
       }
       cout << endl;
    }
 
    cout << "Queen Positions (row, column): ";
-   for (auto pos : positions)
+   for (int i = 0; i < n; i++)
    {
-      cout << "(" << pos.first << ", " << pos.second << ") ";
+      cout << "(" << i << ", " << board[i] << ") ";
    }
    cout << "\n\n";
 }
 
-// Check if it's safe to place a queen at board[row][col]
-bool isSafe(vector<vector<int>> &board, int row, int col, int n)
-{
-   // Check column (upwards)
-   for (int i = 0; i < row; i++)
-   {
-      if (board[i][col] == 1)
-         return false;
-   }
-
-   // Check upper-left diagonal
-   for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--)
-   {
-      if (board[i][j] == 1)
-         return false;
-   }
-
-   // Check upper-right diagonal
-   for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++)
-   {
-      if (board[i][j] == 1)
-         return false;
-   }
-
-   return true;
-}
-
-// Recursive function to solve N-Queens
-bool solveNQueens(vector<vector<int>> &board, int row, int n, vector<pair<int, int>> &positions, int &solutionCount)
+void solveNQueen(int row)
 {
    if (solutionCount >= 3)
-      return true; // Stop further processing after 3 solutions
+      return;
 
    if (row == n)
    {
       solutionCount++;
-      if (solutionCount <= 3)
-      {
-         printBoard(board, n, positions);
-      }
-      return true;
+      printSolution();
+      return;
    }
-
-   bool result = false;
 
    for (int col = 0; col < n; col++)
    {
-      if (isSafe(board, row, col, n))
+      if (isSafe(row, col))
       {
-         board[row][col] = 1;
-         positions.push_back({row, col});
-
-         result = solveNQueens(board, row + 1, n, positions, solutionCount) || result;
-
-         board[row][col] = 0;
-         positions.pop_back();
-
-         if (solutionCount >= 3)
-            break; // Stop trying more columns once 3 solutions are found
+         board[row] = col;
+         solveNQueen(row + 1);
       }
    }
-
-   return result;
 }
 
 int main()
 {
-   int n;
-   cout << "Enter the value of N (e.g., 4): ";
+   cout << "Enter the number of queens: ";
    cin >> n;
 
-   vector<vector<int>> board(n, vector<int>(n, 0));
-   vector<pair<int, int>> positions;
-   int solutionCount = 0;
-
-   if (!solveNQueens(board, 0, n, positions, solutionCount))
+   if (n < 1 || n > MAX)
    {
-      cout << "No solution exists for N = " << n << endl;
+      cout << "Please enter n between 1 and " << MAX << endl;
    }
-   else if (solutionCount > 3)
+   else
    {
-      cout << "Only first 3 configurations shown (more exist)." << endl;
+      cout << "Showing up to 3 solutions for the " << n << "-Queens problem:\n\n";
+      solveNQueen(0);
+      if (solutionCount == 0)
+      {
+         cout << "No solutions exist for N = " << n << endl;
+      }
+      else if (solutionCount >= 3)
+      {
+         cout << "Only first 3 solutions shown. More exist." << endl;
+      }
    }
 
    return 0;
